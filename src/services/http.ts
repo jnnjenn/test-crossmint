@@ -1,7 +1,9 @@
+// Import 
 import axios from "axios";
 import to from 'await-to-js';
 
 const http = axios.create({ baseURL: 'http://challenge.crossmint.io/api' });
+const httpTemp = axios.create({ baseURL: 'https://test-crossmint-default-rtdb.firebaseio.com/' });
 
 http.interceptors.response.use(
   (response) => {
@@ -14,7 +16,8 @@ http.interceptors.response.use(
   },
 );
 
-export const getMatrix = async (candidateID : string) => {
+// Function to call the Endpoint that return the goal map for a candidate
+export const httpGetMatrix = async (candidateID : string) => {
 	const [error, response] = await to(http.get(`/map/${candidateID}/goal`, 
 		{
 			headers: {
@@ -31,7 +34,8 @@ export const getMatrix = async (candidateID : string) => {
 	return response;
 };
 
-export const createPolyanets = (candidateID: string, passRow: number, passColumn: number) => {
+// Function to call the Endpoint that create a POLYanets in the matrix
+export const httpCreatePolyanets = (candidateID: string, passRow: number, passColumn: number) => {
   return http.post(
 		'/polyanets', 
 		{
@@ -42,7 +46,8 @@ export const createPolyanets = (candidateID: string, passRow: number, passColumn
   );
 };
 
-export const deleteMatrix = (candidateID: string, passRow: number, passColumn: number) => {
+// Function to delete a POLYanet inside the matrix, we need to send the position of this as (row, column)
+export const httpDeletePOLYanets = (candidateID: string, passRow: number, passColumn: number) => {
   return http.delete('/polyanets', 
 	{
 		headers: {
@@ -59,23 +64,12 @@ export const deleteMatrix = (candidateID: string, passRow: number, passColumn: n
 	);
 };
 
-/*
-useEffect(() => {
-	// DELETE request using fetch with set headers
-	const requestOptions = {
-		method: 'DELETE',
-		headers: { 
-			'Content-Type': 'application/json',
-			"Access-Control-Allow-Methods": '*'
-		},
-		body: JSON.stringify({
-			candidateId : 'c05c87c3-a8b1-4fe2-9656-71c3e16f32a',
-			row : 3,
-			column : 4
-		})
-	};
-	fetch('https://challenge.crossmint.io/api/polyanets', requestOptions)
-		.then(() => console.log('Delete successful'));
-}, []);
-*/
 
+// Function to call the Endpoint that return the goal map for a candidate
+export const httpGetTempMatrix = async () => {
+	const [error, response] = await to(httpTemp.get(`megaverso/goal.json`));
+	if (error) {
+		throw error;
+	}
+	return response;
+};

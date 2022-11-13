@@ -28,8 +28,6 @@ const callEndpointDeletePOLYanet = async (candidateCode:string, row:number, colu
 	return responseData;
 }
 
-
-
 // Function to delete all the positions are created on X lines
 export const deletePositions = (candidateId: string) =>{	
 	for (let position = 0; position < matrixPositions.length; position++) {
@@ -38,39 +36,6 @@ export const deletePositions = (candidateId: string) =>{
 	}
 }*/
 
-
-
-export const actionCreatePOLYanets = (candidateCode:string, startIn: number) => {
-
-
-
-}
-
-
-// Function to get all the positions where we call the endpoint to create a POLYanet
-export const setPositions = (matrix : []) => {
-	let startin = 2;
-	let total = (matrix.length - 1) - startin;
-	let auxTotal = total;
-	let positions = [];
-
-	for(let i = startin; i <= total; i++){
-		positions.push(i +","+ i);
-		positions.push(i +","+ auxTotal);
-		auxTotal--;
-	}
-	positions.sort();
-	return [...new Set(positions)];
-};
-
-// Function to draw all the row pass through parameter
-const drawRow = (row:[]) => {
-	let drawRow = '';
-	for (let index = 0; index < row.length; index++) {
-		drawRow += ` ${row[index]} `;		
-	}
-	return drawRow + '<br/>';
-}
 
 // Function to get the megaverse
 export const getMegaverse = async () => {
@@ -82,18 +47,7 @@ export const getMegaverse = async () => {
 	return matrix.data;
 };
 
-// Function who get the initial megaverse and pass the string to draw in html
-export const drawMegaverse = (megaverse:any	[]) => {	
-	let drawMegaverse = `<div className='megaverse--row'>`;
-	for (let index = 0; index < megaverse.length; index++) {
-		drawMegaverse += drawRow(megaverse[index]);
-	}
-	return drawMegaverse = drawMegaverse + '</div>';	
-}
-
-
-
-export const createPOLYanet = (megaverse:any[], position:number) => {
+export const createPOLYanet = async (megaverse:any[], position:number) => {
 	position--;
 	let total = (megaverse.length - 1) - position;
 	let auxTotal = total;
@@ -101,6 +55,19 @@ export const createPOLYanet = (megaverse:any[], position:number) => {
 	for(let i = position; i <= total; i++){
 		megaverse[i][i] = '🪐';
 		megaverse[i][auxTotal] = '🪐';
+		auxTotal--;
+	}
+	return megaverse;	
+}
+
+export const resetPOLYanet = async (megaverse:any[]) => {
+	console.log('polyanets.tsx - 108  >>>>>>>>> megaverse:', megaverse);
+	let total = megaverse.length - 1;
+	let auxTotal = total;
+
+	for(let i = 0; i <= total; i++){
+		megaverse[i][i] = '🌌';
+		megaverse[i][auxTotal] = '🌌';
 		auxTotal--;
 	}
 	return megaverse;	

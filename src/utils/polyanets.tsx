@@ -1,41 +1,33 @@
-// Import dependencies
-import { useState } from "react";
+// * Import dependencies
 import { IObj } from "../../types/global";
 import to from "await-to-js";
 
-// Import services
-import { httpGetMatrix, httpCreatePolyanets, httpDeletePOLYanets, httpGetTempMatrix } from "../services/http";
-
-/*
-const [matrix, setMatrix] = useState([]);
-const [matrixPositions, setMatrixPositions] = useState<string[]>([]);
+// * Import services
+import { httpCreatePolyanets, httpDeletePOLYanets, httpGetTempMatrix } from "../services/http";
 
 // Function to use the http service to get the matrix
-const callEndpointCreatePOLYanet = async (candidateCode:string, row:number, column:number) => {		
-	const [error, responseData] = await to<IObj>(httpCreatePolyanets(candidateCode, row, column));
-	if (error) {
-		return;
-	}
-	setMatrix(responseData['goal']);
-}
+export const callEndpointCreatePOLYanet = async (candidateCode:string, megaverse:any[], position:number) => {
+	position--;
+	let total = (megaverse.length - 1) - position;
+	let auxTotal = total;
 
-// Function to use the http service to get the matrix
-const callEndpointDeletePOLYanet = async (candidateCode:string, row:number, column:number) => {		
-	const [error, responseData] = await to<IObj>(httpDeletePOLYanets(candidateCode, row, column));
-	if (error) {
-		return;
+	for(let i = position; i <= total; i++){
+		httpCreatePolyanets(candidateCode, i, i);
+		httpCreatePolyanets(candidateCode, i, auxTotal);
+		auxTotal--;
 	}
-	return responseData;
 }
 
 // Function to delete all the positions are created on X lines
-export const deletePositions = (candidateId: string) =>{	
-	for (let position = 0; position < matrixPositions.length; position++) {
-		let [x, y] = matrixPositions[position].split(",");
-		return callEndpointDeletePOLYanet(candidateId, parseInt(x), parseInt(y));
+export const callEndpointDeletePOLYanet = (candidateCode: string, megaverse:any[]) =>{
+	let auxTotal = megaverse.length - 1;
+	for(let i = 0; i <= megaverse.length - 1; i++){
+		httpDeletePOLYanets(candidateCode, i, i);
+		httpDeletePOLYanets(candidateCode, i, auxTotal);
+		auxTotal--;
 	}
-}*/
-
+	return megaverse;
+}
 
 // Function to get the megaverse
 export const getMegaverse = async () => {
@@ -47,6 +39,7 @@ export const getMegaverse = async () => {
 	return matrix.data;
 };
 
+// Function to create the X POLYanet since the position passed
 export const createPOLYanet = async (megaverse:any[], position:number) => {
 	position--;
 	let total = (megaverse.length - 1) - position;
@@ -60,12 +53,11 @@ export const createPOLYanet = async (megaverse:any[], position:number) => {
 	return megaverse;	
 }
 
+// Function to get all the posible points on X draw and delete
 export const resetPOLYanet = async (megaverse:any[]) => {
-	console.log('polyanets.tsx - 108  >>>>>>>>> megaverse:', megaverse);
-	let total = megaverse.length - 1;
-	let auxTotal = total;
+	let auxTotal = megaverse.length - 1;
 
-	for(let i = 0; i <= total; i++){
+	for(let i = 0; i <= megaverse.length - 1; i++){
 		megaverse[i][i] = '🌌';
 		megaverse[i][auxTotal] = '🌌';
 		auxTotal--;

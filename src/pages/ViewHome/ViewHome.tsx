@@ -6,7 +6,7 @@ import Alert from 'react-popup-alert';
 import logo from '../../assets/logo.png';
 
 // * Import functionality 
-import { getMegaverse, createPOLYanet, resetPOLYanet } from '../../utils/polyanets';
+import { getMegaverse, createPOLYanet, resetPOLYanet, callEndpointCreatePOLYanet, callEndpointDeletePOLYanet } from '../../utils/polyanets';
 import MegaversePaint from '../../components/MegaversePaint/MegaversePain';
 
 // * Styles
@@ -14,7 +14,8 @@ import './style.scss';
 import 'react-popup-alert/dist/index.css';
 
 const ViewHome = () => {
-	const inputCandidateId = 'c05c87c3-a8b1-4fe2-9656-71c3e16f32ac';
+	const candidateCode = 'c05c87c3-a8b1-4fe2-9656-71c3e16f32ac';
+	const initialPosition = 0;
 	const [inputStartIn, setInputStartIn] = useState(0);
 	const [megaverse, setMegaverse] = useState<string[]>([]);
 
@@ -32,8 +33,11 @@ const ViewHome = () => {
 		}else{
 			createPOLYanet(megaverse, inputStartIn).then((matrix:any) => {
 				setMegaverse(matrix);
-				onShowAlert('success', 'The 🪐 POLYanets "X" was created.');
+				setInputStartIn(initialPosition);
 			});
+			
+			// This is the call to the endpoint to create, but I'm having troubles to running it on my local 
+			// callEndpointCreatePOLYanet(candidateCode, megaverse, inputStartIn);
 		}
 	}
 
@@ -43,6 +47,9 @@ const ViewHome = () => {
 			setMegaverse(matrix);
 			onShowAlert('success', 'The Megaverse was clear.');
 		});
+
+		// This is the call to the endpoint to create, but I'm having troubles to running it on my local 
+		// callEndpointDeletePOLYanet(candidateCode, megaverse)
 	}
 
 	// Create the state for the alert component and setting some values
